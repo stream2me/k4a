@@ -105,4 +105,12 @@ Now click "STOP" and then click "START" to load the Debian container.
 
       ls -al /dev/tty*
 
-If there is no device starting with `ttyUSB` or `ttyACM` the script will not work yet for you.
+  If there is no device starting with `ttyUSB` or `ttyACM` the script will not work yet for you.
+
+- Error when installing Telegram-Bot  
+  run:
+  ```bash
+  rm -rf $HOME/moonraker-telegram-bot
+  pip install ujson
+  ```
+  Now try again.
