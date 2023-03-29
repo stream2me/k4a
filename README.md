@@ -13,9 +13,9 @@ My current setup: Ender3 + MKS Robin nano v3  with Klipper Firmware + Oneplus On
 - A rooted Android device with the following installed:
   - Linux Deploy app: [Google Play](https://play.google.com/store/apps/details?id=ru.meefik.linuxdeploy) or [Github](https://github.com/meefik/linuxdeploy/releases/tag/2.6.0)
   - XServer-XSDL app: [Google Play](https://play.google.com/store/apps/details?id=x.org.server) or [Github](https://sourceforge.net/projects/libsdl-android/files/apk/XServer-XSDL/)
-  - optional kerneladiutor: ( to enable all CPU cores) [F-Droid link](https://f-droid.org/en/packages/com.nhellfire.kerneladiutor/)
+  - optional kerneladiutor: (to enable all CPU cores) [F-Droid link](https://f-droid.org/en/packages/com.nhellfire.kerneladiutor/)
 
-- OTG+Charge cable up and running for android device ( please check [this(https://www.youtube.com/watch?v=8afFKyIbky0) video for referenc)
+- OTG+Charge cable up and running for android device (check [this](https://www.youtube.com/watch?v=8afFKyIbky0) video for reference)
 - 3D printer already flashed with Klipper firmware
 
 ## Setup Instructions
@@ -55,7 +55,7 @@ Now open the settings on the lower right corner and create a container using the
   - **Bootstrap**:
     - **Distro**: `Debian`
     - **Installation type**: `Directory`   
-    - **Installation path**: `/data/local/debian11`  
+    - **Installation path**: `/data/debian11`  
     *Note: You can choose a different location but if it's within `${EXTERNALDATA}` then SSH may fail to start.*  
     - **User name**: `print3D`  
     *Note: You can choose something else.*
@@ -72,7 +72,7 @@ Now open the settings on the lower right corner and create a container using the
     
 Return to the main screen and click the 3dots menu in the upper right corner and select "Install".
 When "<<< deploy" appears at the bottom of the interface, the installation is complete.
-Now click "STOP" and then click "START" to load the Debian container.
+Now click "START" to load the Debian container.
 
 ### 4. Install Klipper environment ###
 
@@ -107,10 +107,23 @@ Now click "STOP" and then click "START" to load the Debian container.
 
   If there is no device starting with `ttyUSB` or `ttyACM` the script will not work yet for you.
 
-- Error when installing Telegram-Bot  
-  run:
+- Error when installing Telegram-Bot on armv7l Devices  
+  To fix this run:
   ```bash
-  rm -rf $HOME/moonraker-telegram-bot
-  pip install ujson
+  cd ~  
+  source moonraker-telegram-bot-env/bin/activate
+  wget https://www.piwheels.org/simple/ujson/ujson-5.7.0-cp39-cp39-linux_armv7l.whl#sha256=8fd2bd5b35b31cb98211a55cd80c9040eac567f28c75ed668ad88761b69454f9
+  python3 -m pip install ujson-5.7.0-cp39-cp39-linux_armv7l.whl
+  deactivate
+  cd moonraker-telegram-bot
+  ./scripts/install.sh  
   ```
-  Now try again.
+  **Important** `Don't rebuild the python virtualenv.`
+  
+   <img width="454" alt="Telegram-venv" src="https://user-images.githubusercontent.com/32234535/228632863-2a4e1d3a-db0f-4de4-a4b7-bdfe3a681a04.png">
+
+  After the installation was succesfull run:
+  ```bash
+  sudo update-rc.d telegram defaults
+  sudo /etc/init.d/telegram start
+  ```
